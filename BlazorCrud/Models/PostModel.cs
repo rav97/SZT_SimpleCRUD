@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BlazorCrud.Models
 {
-    public class PostModel
+    public class posts
     {
         public int Id { get; set; }
         public DateTime CreateDate { get; set; }

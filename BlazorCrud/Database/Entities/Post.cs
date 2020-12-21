@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace BlazorCrud.Entities
+namespace BlazorCrud.Database.Entities
 {
     public partial class Post
     {
