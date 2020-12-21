@@ -123,19 +123,12 @@ else
     {
         //display total page buttons
         pagerSize = 3;
-        pageSize = 5;
+        pageSize = 10;
         curPage = 1;
         postsList = await postsManager.ListAll((curPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
         totalRecords = await postsManager.Count(searchTerm);
         totalPages = (int)Math.Ceiling(totalRecords / (decimal)pageSize);
         SetPagerSize("forward");
-    }
-
-
-    protected async Task DeleteArticle(int id)
-    {
-        await postsManager.Delete(id);
-        postsList = await postsManager.ListAll((curPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
     }
 
     private bool isSortedAscending;

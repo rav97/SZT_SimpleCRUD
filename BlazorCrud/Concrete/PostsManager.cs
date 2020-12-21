@@ -1,5 +1,6 @@
 ﻿using BlazorCrud.Contracts;
 using BlazorCrud.Database.Entities;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,24 +20,35 @@ namespace BlazorCrud.Concrete
 
         public Task<int> Count(string search)
         {
-            var totalPosts = Task.FromResult(_dapperManager.Get<int>($"select COUNT(*) from Posts WHERE Title like '%{search}%'", null,
+            var totalPosts = Task.FromResult(_dapperManager.Get<int>($"SELECT COUNT(*) FROM [Posts] WHERE title LIKE '%{search}%'", null,
                     commandType: CommandType.Text));
             return totalPosts;
         }
 
         public Task<int> Insert(Post post)
         {
-            throw new NotImplementedException();
+            var dbPara = new DynamicParameters();
+            dbPara.Add("title", post.Title, DbType.String);
+            dbPara.Add("content", post.PostContent, DbType.String);
+
+            var articleId = Task.FromResult(_dapperManager.Insert<int>("[dbo].[INSERT_POST]",
+                            dbPara,
+                            commandType: CommandType.StoredProcedure));
+            return articleId;
         }
 
         public Task<int> Delete(int Id)
         {
-            throw new NotImplementedException();
+            var deleteArticle = Task.FromResult(_dapperManager.Execute($"DELETE [Posts] WHERE id = {Id}", null,
+                    commandType: CommandType.Text));
+            return deleteArticle;
         }
 
         public Task<Post> SelectById(int Id)
         {
-            throw new NotImplementedException();
+            var article = Task.FromResult(_dapperManager.Get<Post>($"SELECT * FROM [Posts] WHERE id = {Id}", null,
+                    commandType: CommandType.Text));
+            return article;
         }
 
         public Task<List<Post>> ListAll(int skip, int take, string orderBy, string direction, string search)
@@ -46,9 +58,17 @@ namespace BlazorCrud.Concrete
             return posts;
         }
 
-        public Task<int> Update(Post article)
+        public Task<int> Update(Post post)
         {
-            throw new NotImplementedException();
+            var dbPara = new DynamicParameters();
+            dbPara.Add("id", post.Id);
+            dbPara.Add("title", post.Title, DbType.String);
+            dbPara.Add("content", post.PostContent, DbType.String);
+
+            var updateArticle = Task.FromResult(_dapperManager.Update<int>("[dbo].[UPDATE_POST]",
+                                                dbPara,
+                                                commandType: CommandType.StoredProcedure));
+            return updateArticle;
         }
     }
 }
