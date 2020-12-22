@@ -1,0 +1,48 @@
+﻿@page "/showPost/{ID}"
+@inject IPostsManager postManager
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <h2>@post.Title</h2>
+                <pre>@post.PostContent</pre>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-info" @onclick="() => Cancel()">Cancel</button>
+                <button type="button" class="btn btn-outline-warning" @onclick="() => Edit()">Edit</button>
+                <button type="button" class="btn btn-danger" @onclick="() => Delete()">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@code  {
+
+    [Parameter]
+    public string ID { get; set; }
+
+    Post post = new Post();
+
+    protected override async Task OnInitializedAsync()
+    {
+        post = await postManager.SelectById(Convert.ToInt32(ID));
+    }
+
+    protected async Task Delete()
+    {
+        await postManager.Delete(Convert.ToInt32(ID));
+        navigationManager.NavigateTo("/posts");
+    }
+
+    void Edit()
+    {
+        navigationManager.NavigateTo($"/editPost/{ID}");
+    }
+
+    void Cancel()
+    {
+        navigationManager.NavigateTo("/posts");
+    }
+}
