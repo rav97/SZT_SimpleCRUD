@@ -1,0 +1,39 @@
+﻿@page "/contact"
+@inject IContactManager contactManager
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="Name" class="control-label">Email</label>
+                <input type="text" for="Name" class="form-control" @bind-value="@contactRequest.Email" />
+                <label for="Name" class="control-label">Your message</label>
+                <textarea form="Name" class="form-control" @bind="@contactRequest.Message" @bind:event="oninput" />
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" @onclick="() => SendRequest()">Send</button>
+                <button type="button" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@code  {
+
+    ContactRequest contactRequest = new ContactRequest();
+
+    protected async Task SendRequest()
+    {
+        int result = await contactManager.Insert(contactRequest);
+        if (result > 0)
+            navigationManager.NavigateTo("/sended");
+        else
+            navigationManager.NavigateTo("/error");
+    }
+
+    void Cancel()
+    {
+        navigationManager.NavigateTo("/");
+    }
+}

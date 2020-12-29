@@ -12,7 +12,7 @@
                 <textarea form="Name" class="form-control" @bind="@post.PostContent" @bind:event="oninput" />
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" @onclick="() => UpdateArticle()">Save</button>
+                <button type="button" class="btn btn-primary" @onclick="() => UpdatePost()">Save</button>
                 <button type="button" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
             </div>
         </form>
@@ -31,7 +31,7 @@
         post = await postManager.SelectById(Convert.ToInt32(ID));
     }
 
-    protected async Task UpdateArticle()
+    protected async Task UpdatePost()
     {
         await postManager.Update(post);
         navigationManager.NavigateTo("/posts");

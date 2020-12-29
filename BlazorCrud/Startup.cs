@@ -36,6 +36,7 @@ namespace BlazorCrud
                                                             Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IPostsManager, PostsManager>();
+            services.AddScoped<IContactManager, ContactManager>();
             services.AddScoped<IDapperManager, DapperManager>();
         }
 
