@@ -2,38 +2,47 @@
 @inject IPostsManager postManager
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
-<div class="row">
-    <div class="col-md-4">
-        <form>
-            <div class="form-group">
-                <label for="Name" class="control-label">Name</label>
-                <input type="text" for="Name" class="form-control" @bind-value="@post.Title" />
-                <label for="Name" class="control-label">Content</label>
-                <textarea form="Name" class="form-control" @bind="@post.PostContent" @bind:event="oninput" />
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" @onclick="() => UpdatePost()">Save</button>
-                <button type="button" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
-            </div>
-        </form>
+<h2>
+    Edit Post
+</h2>
+
+<EditForm Model="@post" OnValidSubmit="UpdatePost">
+    <DataAnnotationsValidator />
+    <div>
+        <div class="form-group">
+            <label for="Title" class="control-label">Title</label>
+            <input for="Title" type="text" class="form-control" @bind-value="@post.Title" />
+            <ValidationMessage For="@(() => post.Title)" />
+        </div>
+        <div class="form-group">
+            <label for="Content" class="control-label">Content</label>
+            <ValidationMessage For="@(() => post.PostContent)" />
+            <textarea for="Content" style="height:400px" class="form-control" @bind="@post.PostContent" @bind:event="oninput" />
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Save" />
+            <button type="button" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
+        </div>
     </div>
-</div>
+</EditForm>
 
 @code  {
 
     [Parameter]
     public string ID { get; set; }
 
-    Post post = new Post();
+    PostModel post = new PostModel();
 
     protected override async Task OnInitializedAsync()
     {
-        post = await postManager.SelectById(Convert.ToInt32(ID));
+        Post p = await postManager.SelectById(Convert.ToInt32(ID));
+        post = PostMapper.MappData(p);
     }
 
     protected async Task UpdatePost()
     {
-        await postManager.Update(post);
+        await postManager.Update(PostMapper.MappData(post));
         navigationManager.NavigateTo("/posts");
     }
 

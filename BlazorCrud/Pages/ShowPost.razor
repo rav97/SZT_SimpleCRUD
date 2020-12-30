@@ -2,20 +2,14 @@
 @inject IPostsManager postManager
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
-<div class="row">
-    <div class="col-md-4">
-        <form>
-            <div class="form-group">
-                <h2>@post.Title</h2>
-                <pre>@post.PostContent</pre>
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-info" @onclick="() => Cancel()">Cancel</button>
-                <button type="button" class="btn btn-outline-warning" @onclick="() => Edit()">Edit</button>
-                <button type="button" class="btn btn-danger" @onclick="() => Delete()">Delete</button>
-            </div>
-        </form>
-    </div>
+<div>
+    <h2>@post.Title</h2>
+    <pre class="wrap">@post.PostContent</pre>
+</div>
+<div class="form-group">
+    <button type="button" class="btn btn-info" @onclick="() => Cancel()">Cancel</button>
+    <button type="button" class="btn btn-outline-warning" @onclick="() => Edit()">Edit</button>
+    <button type="button" class="btn btn-danger" @onclick="() => Delete()">Delete</button>
 </div>
 
 @code  {

@@ -21,12 +21,15 @@
         border: 2px solid #000;
         margin: 0px 5px 0px 5px;
     }
+
+    .margin{
+        margin: 0px 0px 10px 0px;
+    }
 </style>
 
 <div>
     <a class="btn btn-primary" href='/createPost'>Add</a>
 </div>
-<br />
 
 @if (postsList == null)
 {
@@ -34,24 +37,22 @@
 }
 else
 {
-    <div class="row col-md-3 pull-right">
-        <input type="text" id="txtSearch" placeholder="Search Titles..." class="form-control" @bind="SearchTerm" @bind:event="oninput" />
+    <div class="row col-md-3 margin pull-right" >
+        <input type="text" id="txtSearch" placeholder="Search..." class="form-control" @bind="SearchTerm" @bind:event="oninput" />
     </div>
 
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th class="sort-th" @onclick="@(() => SortTable("Id"))" width="15%">
-                    ID
-                    <span class="fa @(SetSortIcon("Id"))"></span>
-                </th>
-                <th class="sort-th" @onclick="@(() => SortTable("CreateDate"))" width="20%">
+                <th class="sort-th" @onclick="@(() => SortTable("CreateDate"))" width="20%" valign="middle">
                     Created
                     <span class="fa @(SetSortIcon("CreateDate"))"></span>
                 </th>
-                <th class="sort-th" @onclick="@(() => SortTable("Title"))" width="65%">
+                <th class="sort-th" @onclick="@(() => SortTable("Title"))" width="70%" valign="middle">
                     Title
                     <span class="fa @(SetSortIcon("Title"))"></span>
+                </th>
+                <th width="10%" align="center" valign="middle">
                 </th>
             </tr>
         </thead>
@@ -69,9 +70,9 @@ else
                 foreach (var post in postsList)
                 {
                     <tr>
-                        <td>@post.Id</td>
-                        <td>@post.CreateDate</td>
-                        <td><a href='/showPost/@post.Id'>@post.Title</a></td>
+                        <td>@post.CreateDate.ToShortDateString() @post.CreateDate.ToShortTimeString()</td>
+                        <td>@post.Title</td>
+                        <td align="center"><a class="btn btn-outline-info" href='/showPost/@post.Id'>Show</a></td>
                     </tr>
                 }
             }
@@ -79,7 +80,7 @@ else
         </tbody>
     </table>
     <div class="pagination">
-        <button class="btn btn-custom" @onclick=@(async ()=>await NavigateToPage("previous"))>Prev</button>
+        <button class="btn btn-custom" @onclick=@(async ()=>await NavigateToPage("previous"))>&lt;</button>
 
         @for (int i = startPage; i <= endPage; i++)
         {
@@ -89,7 +90,7 @@ else
             </button>
         }
 
-        <button class="btn btn-custom" @onclick=@(async ()=>await NavigateToPage("next"))>Next</button>
+        <button class="btn btn-custom" @onclick=@(async ()=>await NavigateToPage("next"))>&gt;</button>
 
     </div>
 }
@@ -99,8 +100,15 @@ else
     private string searchTerm;
     private string SearchTerm
     {
-        get { return searchTerm; }
-        set { searchTerm = value; FilterRecords(); }
+        get
+        {
+            return searchTerm;
+        }
+        set
+        {
+            searchTerm = value;
+            FilterRecords();
+        }
     }
 
     List<Post> postsList;
@@ -123,7 +131,7 @@ else
     {
         //display total page buttons
         pagerSize = 3;
-        pageSize = 10;
+        pageSize = 7;
         curPage = 1;
         postsList = await postsManager.ListAll((curPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
         totalRecords = await postsManager.Count(searchTerm);

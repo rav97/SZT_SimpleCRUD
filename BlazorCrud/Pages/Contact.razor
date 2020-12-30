@@ -2,30 +2,36 @@
 @inject IContactManager contactManager
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
-<div class="row">
-    <div class="col-md-4">
-        <form>
+<EditForm Model="@contactRequest" OnValidSubmit="@SendRequest">
+    <DataAnnotationsValidator />
+    <div class="row">
+        <div class="col-md-4">
+
             <div class="form-group">
-                <label for="Name" class="control-label">Email</label>
-                <input type="text" for="Name" class="form-control" @bind-value="@contactRequest.Email" />
-                <label for="Name" class="control-label">Your message</label>
-                <textarea form="Name" class="form-control" @bind="@contactRequest.Message" @bind:event="oninput" />
+                <label for="Email" class="control-label">Email</label>
+                <input for="Email" type="email" class="form-control" @bind-value="@contactRequest.Email" />
+                <ValidationMessage For="@(() => contactRequest.Email)" />
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" @onclick="() => SendRequest()">Send</button>
+                <label for="Message" class="control-label">Your message</label>
+                <textarea for="Message" class="form-control" @bind="@contactRequest.Message" @bind:event="oninput" />
+                <ValidationMessage For="@(() => contactRequest.Message)" />
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Send" />
                 <button type="button" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</EditForm>
 
 @code  {
 
-    ContactRequest contactRequest = new ContactRequest();
+    ContactRequestModel contactRequest = new ContactRequestModel();
 
     protected async Task SendRequest()
     {
-        int result = await contactManager.Insert(contactRequest);
+        int result = await contactManager.Insert(ContactRequestMapper.MappData(contactRequest));
         if (result > 0)
             navigationManager.NavigateTo("/sended");
         else
