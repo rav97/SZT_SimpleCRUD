@@ -51,10 +51,13 @@ namespace BlazorCrud.Concrete
             return result;
         }
 
-        public Task<List<Post>> ListAll(int skip, int take, string orderBy, string direction, string search)
+        public Task<List<Post>> ListPage(string search, string orderBy, string direction, int pageSize, int pageNo)
         {
             var result = Task.FromResult(_dapperManager.GetAll<Post>
-                ($"SELECT * FROM GET_POSTS({skip}, {take}, '{search}') ORDER BY {orderBy} {direction};", null, commandType: CommandType.Text));
+                ($"EXEC [dbo].[SELECT_POSTS] '{search}', '{orderBy}', '{direction}', {pageSize}, {pageNo}",
+                 null,
+                 commandType: CommandType.Text));
+
             return result;
         }
 

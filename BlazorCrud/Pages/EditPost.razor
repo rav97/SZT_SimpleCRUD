@@ -43,11 +43,11 @@
     protected async Task UpdatePost()
     {
         await postManager.Update(PostMapper.MappData(post));
-        navigationManager.NavigateTo("/posts");
+        navigationManager.NavigateTo($"/showPost/{ID}");
     }
 
     void Cancel()
     {
-        navigationManager.NavigateTo("/posts");
+        navigationManager.NavigateTo($"/showPost/{ID}");
     }
 }

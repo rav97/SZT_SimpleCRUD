@@ -13,6 +13,6 @@ namespace BlazorCrud.Contracts
         Task<int> Count(string search);
         Task<int> Update(Post post);
         Task<Post> SelectById(int Id);
-        Task<List<Post>> ListAll(int skip, int take, string orderBy, string direction, string search);
+        Task<List<Post>> ListPage(string search, string orderBy, string direction, int pageSize, int pageNo);
     }
 }

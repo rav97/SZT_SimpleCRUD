@@ -133,7 +133,7 @@ else
         pagerSize = 3;
         pageSize = 7;
         curPage = 1;
-        postsList = await postsManager.ListAll((curPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
+        postsList = await postsManager.ListPage(searchTerm, sortColumnName, sortDir, pageSize, curPage);
         totalRecords = await postsManager.Count(searchTerm);
         totalPages = (int)Math.Ceiling(totalRecords / (decimal)pageSize);
         SetPagerSize("forward");
@@ -144,7 +144,7 @@ else
 
     private async Task<List<Post>> SortRecords(string columnName, string dir)
     {
-        return await postsManager.ListAll((curPage - 1) * pageSize, pageSize, columnName, dir, searchTerm);
+        return await postsManager.ListPage(searchTerm, columnName, dir, pageSize, curPage);
     }
 
     private async Task SortTable(string columnName)
@@ -190,7 +190,7 @@ else
 
     public async Task refreshRecords(int currentPage)
     {
-        postsList = await postsManager.ListAll((currentPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
+        postsList = await postsManager.ListPage(searchTerm, sortColumnName, sortDir, pageSize, currentPage);
         curPage = currentPage;
         this.StateHasChanged();
     }
