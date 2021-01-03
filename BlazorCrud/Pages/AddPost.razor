@@ -33,8 +33,8 @@
 
     protected async Task CreatePost()
     {
-        await postManager.Insert(PostMapper.MappData(post));
-        navigationManager.NavigateTo("/posts");
+        int id = await postManager.Insert(PostMapper.MappData(post));
+        navigationManager.NavigateTo($"/showPost/{id}");
     }
 
     void Cancel()

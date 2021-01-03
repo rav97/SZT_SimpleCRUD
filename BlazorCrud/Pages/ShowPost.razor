@@ -4,10 +4,10 @@
 
 <div>
     <h2>@post.Title</h2>
-    <pre class="wrap">@post.PostContent</pre>
+    <pre class="text-wrap text-justify">@post.PostContent</pre>
 </div>
 <div class="form-group">
-    <button type="button" class="btn btn-info" @onclick="() => Cancel()">Cancel</button>
+    <button type="button" class="btn btn-info" @onclick="() => Cancel()">Back</button>
     <button type="button" class="btn btn-outline-warning" @onclick="() => Edit()">Edit</button>
     <button type="button" class="btn btn-danger" @onclick="() => Delete()">Delete</button>
 </div>

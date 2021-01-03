@@ -17,7 +17,7 @@ namespace BlazorCrud.Models
         [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Wrong email format")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Message is required")]
         [MinLength(10, ErrorMessage = "Message is too short")]
         public string Message { get; set; }
         public bool IsRead { get; set; }
